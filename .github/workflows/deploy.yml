@@ -10,17 +10,17 @@ jobs:
     runs-on: ubuntu-latest
 
     steps:
-    - name: SSH and Deploy to EC2
-      uses: appleboy/ssh-action@v0.1.6
-      with:
-        host: ${{ secrets.EC2_HOST }}
-        username: ${{ secrets.EC2_USER }}
-        key: ${{ secrets.EC2_SSH_KEY }}
-        script: |
-          cd /home/ubuntu/devops-cicd-project || exit 1
-          git pull origin main
+      - name: SSH and Deploy to EC2
+        uses: appleboy/ssh-action@v0.1.6
+        with:
+          host: ${{ secrets.EC2_HOST }}
+          username: ${{ secrets.EC2_USER }}
+          key: ${{ secrets.EC2_SSH_KEY }}
+          script: |
+            cd /home/ubuntu/devops-cicd-project || exit 1
+            git pull origin main
+            cd app || exit 1
+            docker-compose down || true
+            docker-compose up -d --build
 
-      cd app || exit 1
-      docker-compose down || true
-      docker-compose up -d --build
 
